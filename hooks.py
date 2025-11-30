@@ -102,7 +102,8 @@ class PatchManager:
             # Attention hook
             def make_attn_hook(li: int):
                 def hook(mod: nn.Module, _inp, out):
-                    attn_out = out[0] if isinstance(out, tuple) else out  # shape (B, T, D)
+                    is_tuple = isinstance(out, tuple)
+                    attn_out = out[0] if is_tuple else out  # shape (B, T, D)
                     heads = mod.num_heads
                     d_head = attn_out.shape[-1] // heads
                     reshaped = attn_out.view(attn_out.shape[0], attn_out.shape[1], heads, d_head)
@@ -121,29 +122,36 @@ class PatchManager:
                                 if cached is not None:
                                     reshaped[:, :, h, :] = cached.to(reshaped.device)
 
-                    return reshaped.view_as(attn_out)
+                    patched = reshaped.view_as(attn_out)
+                    if is_tuple:
+                        # Preserve any auxiliary outputs (e.g., attention weights)
+                        rest = out[1:]
+                        return (patched, *rest)
+                    return patched
 
                 return hook
 
             self._hooks.append(block.self_attn.register_forward_hook(make_attn_hook(layer_idx)))
 
             # MLP hook
-            def make_mlp_hook(li: int):
-                def hook(_mod: nn.Module, _inp, out):
-                    if self.mode == "record":
-                        cached = out.detach()
-                        if self.cache_dtype:
-                            cached = cached.to(self.cache_dtype)
-                        self.cache.mlp[li] = cached.to(self.cache_device)
-                    elif self.mode == "patch":
-                        if li in self.target_mlp_layers or li in self.target_layers:
-                            cached = self.cache.mlp.get(li)
-                            if cached is not None:
-                                return cached.to(out.device)
-                    return out
+            mlp_module = getattr(block, "mlp", None)
+            if mlp_module is None:
+                mlp_module = getattr(block, "fc2", None)  # fair-esm uses fc2 as the second FFN linear
+            if mlp_module is not None:
+                def make_mlp_hook(li: int):
+                    def hook(_mod: nn.Module, _inp, out):
+                        if self.mode == "record":
+                            cached = out.detach()
+                            if self.cache_dtype:
+                                cached = cached.to(self.cache_dtype)
+                            self.cache.mlp[li] = cached.to(self.cache_device)
+                        elif self.mode == "patch":
+                            if li in self.target_mlp_layers or li in self.target_layers:
+                                cached = self.cache.mlp.get(li)
+                                if cached is not None:
+                                    return cached.to(out.device)
+                        return out
 
-                return hook
+                    return hook
 
-                # End make_mlp_hook
-
-            self._hooks.append(block.mlp.register_forward_hook(make_mlp_hook(layer_idx)))
+                self._hooks.append(mlp_module.register_forward_hook(make_mlp_hook(layer_idx)))
