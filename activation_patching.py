@@ -1,4 +1,4 @@
-from typing import Any, Callable, Dict, List, Sequence
+from typing import Any, Callable, Dict, List
 
 import torch
 
@@ -68,7 +68,9 @@ def sweep_heads_once(
             # Per-example recovery; avoid div by zero
             recovery_vec = torch.zeros_like(delta_vec)
             nonzero = delta_vec != 0
-            recovery_vec[nonzero] = (patched_vec[nonzero] - corrupted_vec[nonzero]) / delta_vec[nonzero]
+            recovery_vec[nonzero] = (
+                patched_vec[nonzero] - corrupted_vec[nonzero]
+            ) / delta_vec[nonzero]
             recovery_mean = float(recovery_vec.mean().item())
             results.append(
                 {

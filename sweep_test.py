@@ -28,7 +28,10 @@ def main():
         print(f"Pair {pr['index']} mask_pos={pr['mask_pos']}")
         print("  clean_metric:", pr["clean_metric"])
         print("  corrupted_metric:", pr["corrupted_metric"])
-        print("  top 3 heads:", sorted(pr["head_results"], key=lambda x: x["recovery"], reverse=True)[:3])
+        print(
+            "  top 3 heads:",
+            sorted(pr["head_results"], key=lambda x: x["recovery"], reverse=True)[:3],
+        )
     print("Top averaged heads:", res["averaged_head_recovery"][:5])
 
 

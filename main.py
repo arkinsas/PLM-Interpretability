@@ -1,6 +1,6 @@
-import torch
 import esm
-import random
+import torch
+
 from contact_patching import run_contact_sweep
 from hooks import PatchManager
 from utils import create_corrupted_shuffled
@@ -25,8 +25,8 @@ def get_best_long_range_contact(model, alphabet, sequence, device):
     candidates = []
 
     # Collect valid strong contacts (min separation 10)
-    for i in range(1, L-1):
-        for j in range(i + 10, L-1):
+    for i in range(1, L - 1):
+        for j in range(i + 10, L - 1):
             score = contacts[i, j].item()
             if score > 0.8:
                 candidates.append(((i, j), score, j - i))
@@ -38,16 +38,21 @@ def get_best_long_range_contact(model, alphabet, sequence, device):
     candidates.sort(key=lambda x: (x[2], x[1]), reverse=True)
 
     best_contact, best_score, dist = candidates[0]
-    print(f"Selected Target: Indices {best_contact} | Separation: {dist} | Score: {best_score:.4f}")
+    print(
+        f"Selected Target: Indices {best_contact} | Separation: {dist} | Score: {best_score:.4f}"
+    )
     return best_contact, best_score
 
-def verify_cumulative_recovery(model, alphabet, device, pair, top_heads, num_cumulative=10):
+
+def verify_cumulative_recovery(
+    model, alphabet, device, pair, top_heads, num_cumulative=10
+):
     """
     Patches the Top 1...N heads simultaneously.
     """
-    print("\n" + "="*40)
+    print("\n" + "=" * 40)
     print(f"Running Cumulative Patching on Top {num_cumulative} Heads")
-    print("="*40)
+    print("=" * 40)
 
     clean_seq, corrupt_seq, (t_i, t_j) = pair
     batch_converter = alphabet.get_batch_converter()
@@ -60,13 +65,13 @@ def verify_cumulative_recovery(model, alphabet, device, pair, top_heads, num_cum
 
     pm = PatchManager(model, device)
 
-    # 1. Record Clean
+    # Record Clean
     with torch.no_grad():
         with pm.recording():
             res_clean = model(clean_dict["tokens"], return_contacts=True)
             clean_prob = res_clean["contacts"][0, t_i, t_j].item()
 
-    # 2. Record Corrupt Baseline
+    # Record Corrupt Baseline
     with torch.no_grad():
         res_corr = model(corr_dict["tokens"], return_contacts=True)
         corr_prob = res_corr["contacts"][0, t_i, t_j].item()
@@ -77,7 +82,7 @@ def verify_cumulative_recovery(model, alphabet, device, pair, top_heads, num_cum
 
     for k in range(1, num_cumulative + 1):
         current_heads = top_heads[:k]
-        target_set = {(h['layer'], h['head']) for h in current_heads}
+        target_set = {(h["layer"], h["head"]) for h in current_heads}
 
         pm.set_target(heads=target_set)
 
@@ -87,18 +92,20 @@ def verify_cumulative_recovery(model, alphabet, device, pair, top_heads, num_cum
                 patched_prob = res_patched["contacts"][0, t_i, t_j].item()
 
         denom = clean_prob - corr_prob
-        if abs(denom) < 1e-6: denom = 1e-6
+        if abs(denom) < 1e-6:
+            denom = 1e-6
         recovery = (patched_prob - corr_prob) / denom
 
         print(f"Top {k} Heads: Score {patched_prob:.4f} | Recovery {recovery:.2f}")
+
 
 def sweep_mlps(model, alphabet, device, pair):
     """
     Sweeps through MLP layers to check for Signal Driving or Suppression.
     """
-    print("\n" + "="*40)
+    print("\n" + "=" * 40)
     print("Running MLP Sweep (Feed Forward Layers)")
-    print("="*40)
+    print("=" * 40)
 
     clean_seq, corrupt_seq, (t_i, t_j) = pair
     batch_converter = alphabet.get_batch_converter()
@@ -121,7 +128,8 @@ def sweep_mlps(model, alphabet, device, pair):
         corr_prob = res_corr["contacts"][0, t_i, t_j].item()
 
     denom = clean_prob - corr_prob
-    if abs(denom) < 1e-9: denom = 1e-9
+    if abs(denom) < 1e-9:
+        denom = 1e-9
 
     # Sweep Layers
     for layer_idx in range(len(model.layers)):
@@ -135,6 +143,7 @@ def sweep_mlps(model, alphabet, device, pair):
 
         recovery = (patched_prob - corr_prob) / denom
         print(f"MLP Layer {layer_idx}: Recovery {recovery:.2f}")
+
 
 def run_single_protein_analysis(model, alphabet, device, name, sequence):
     """
@@ -157,13 +166,17 @@ def run_single_protein_analysis(model, alphabet, device, name, sequence):
     res = run_contact_sweep(model, alphabet, device, pairs)
 
     pair_res = res["pairs"][0]
-    clean_score = pair_res['clean_metric']
-    corr_score = pair_res['corrupted_metric']
+    clean_score = pair_res["clean_metric"]
+    corr_score = pair_res["corrupted_metric"]
 
     print(f"\n : {name} Results")
-    print(f"Clean: {clean_score:.4f} | Corrupt: {corr_score: .4f} | Delta: {clean_score - corr_score: .4f}")
+    print(
+        f"Clean: {clean_score:.4f} | Corrupt: {corr_score: .4f} | Delta: {clean_score - corr_score: .4f}"
+    )
 
-    top_heads = sorted(pair_res["head_results"], key=lambda x: x["recovery"], reverse=True)
+    top_heads = sorted(
+        pair_res["head_results"], key=lambda x: x["recovery"], reverse=True
+    )
     for h in top_heads[:3]:
         print(f"  Layer {h['layer']} Head {h['head']}: Recovery {h['recovery']:.2f}")
 
@@ -173,6 +186,7 @@ def run_single_protein_analysis(model, alphabet, device, name, sequence):
 
     return pair_res
 
+
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -181,8 +195,11 @@ def main():
     model = model.eval().to(device)
 
     # UBIQUITIN Sequence
-    ubiquitin_seq = "MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG"
+    ubiquitin_seq = (
+        "MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG"
+    )
     run_single_protein_analysis(model, alphabet, device, "Ubiquitin", ubiquitin_seq)
+
 
 if __name__ == "__main__":
     main()

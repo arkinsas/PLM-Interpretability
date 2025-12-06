@@ -1,5 +1,6 @@
 import random
 
+
 def create_corrupted_shuffled(sequence, tensor_idx_i, tensor_idx_j):
     """
     Shuffles the span between contacts to break the interaction context.

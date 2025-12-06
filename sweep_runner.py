@@ -63,7 +63,9 @@ def run_head_sweep(
         corrupted_tokens = corrupted_tokens.to(device)
 
         def forward_fn(batch):
-            return model(batch["tokens"], repr_layers=[], return_contacts=False)["logits"]
+            return model(batch["tokens"], repr_layers=[], return_contacts=False)[
+                "logits"
+            ]
 
         def metric_fn(logits):
             vals = []
@@ -81,10 +83,14 @@ def run_head_sweep(
             metric_fn=metric_fn,
         )
 
-        # assign per-example results back to global pair indices
-        for local_b, global_idx in enumerate(range(start, min(start + batch_size, len(pairs)))):
+        # Assign per-example results back to global pair indices
+        for local_b, global_idx in enumerate(
+            range(start, min(start + batch_size, len(pairs)))
+        ):
             pair_results[global_idx]["clean_metric"] = res["clean_metrics"][local_b]
-            pair_results[global_idx]["corrupted_metric"] = res["corrupted_metrics"][local_b]
+            pair_results[global_idx]["corrupted_metric"] = res["corrupted_metrics"][
+                local_b
+            ]
             for hr in res["head_results"]:
                 pair_results[global_idx]["head_results"].append(
                     {

@@ -7,7 +7,7 @@ experiments without modifying the underlying model code.
 
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set, Tuple
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 import torch
 from torch import nn
@@ -17,7 +17,9 @@ from torch import nn
 class ActivationCache:
     """Holds cached activations from a clean forward pass."""
 
-    attn: Dict[Tuple[int, int], torch.Tensor]  # (layer, head) -> tensor of shape (B, T, d_head)
+    attn: Dict[
+        Tuple[int, int], torch.Tensor
+    ]  # (layer, head) -> tensor of shape (B, T, d_head)
     mlp: Dict[int, torch.Tensor]  # layer -> tensor of shape (B, T, D)
 
 
@@ -106,7 +108,9 @@ class PatchManager:
                     attn_out = out[0] if is_tuple else out  # shape (B, T, D)
                     heads = mod.num_heads
                     d_head = attn_out.shape[-1] // heads
-                    reshaped = attn_out.view(attn_out.shape[0], attn_out.shape[1], heads, d_head)
+                    reshaped = attn_out.view(
+                        attn_out.shape[0], attn_out.shape[1], heads, d_head
+                    )
 
                     if self.mode == "record":
                         for h in range(heads):
@@ -131,13 +135,18 @@ class PatchManager:
 
                 return hook
 
-            self._hooks.append(block.self_attn.register_forward_hook(make_attn_hook(layer_idx)))
+            self._hooks.append(
+                block.self_attn.register_forward_hook(make_attn_hook(layer_idx))
+            )
 
             # MLP hook
             mlp_module = getattr(block, "mlp", None)
             if mlp_module is None:
-                mlp_module = getattr(block, "fc2", None)  # fair-esm uses fc2 as the second FFN linear
+                mlp_module = getattr(
+                    block, "fc2", None
+                )  # fair-esm uses fc2 as the second FFN linear
             if mlp_module is not None:
+
                 def make_mlp_hook(li: int):
                     def hook(_mod: nn.Module, _inp, out):
                         if self.mode == "record":
@@ -154,4 +163,6 @@ class PatchManager:
 
                     return hook
 
-                self._hooks.append(mlp_module.register_forward_hook(make_mlp_hook(layer_idx)))
+                self._hooks.append(
+                    mlp_module.register_forward_hook(make_mlp_hook(layer_idx))
+                )

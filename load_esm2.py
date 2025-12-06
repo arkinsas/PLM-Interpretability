@@ -4,7 +4,6 @@ import sys
 import torch
 from esm import pretrained
 
-
 MODEL_CHOICES = [
     "esm2_t6_8M_UR50D",
     "esm2_t12_35M_UR50D",
@@ -25,7 +24,9 @@ def load_model(model_name: str, device: torch.device):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Load an ESM-2 model and print hook-relevant info.")
+    parser = argparse.ArgumentParser(
+        description="Load an ESM-2 model and print hook-relevant info."
+    )
     parser.add_argument(
         "--model",
         default="esm2_t12_35M_UR50D",
@@ -50,7 +51,11 @@ def main(argv=None):
     num_layers = len(model.layers)
     head_counts = [blk.self_attn.num_heads for blk in model.layers]
     unique_heads = sorted(set(head_counts))
-    dim = model.embed_dim if hasattr(model, "embed_dim") else model.layers[0].self_attn.embed_dim
+    dim = (
+        model.embed_dim
+        if hasattr(model, "embed_dim")
+        else model.layers[0].self_attn.embed_dim
+    )
 
     print(f"Loaded {args.model} on {device}")
     print(f"Vocabulary size: {len(alphabet)}")
