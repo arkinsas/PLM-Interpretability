@@ -1,0 +1,237 @@
+Selected Target: Indices (1, 17) | Separation: 16 | Score: 0.8236
+Attention Head Sweep
+
+ : Ubiquitin Results
+Clean: 0.8236 | Corrupt:  0.2317 | Delta:  0.5919
+  Layer 4 Head 18: Recovery 0.08
+  Layer 1 Head 8: Recovery 0.07
+  Layer 2 Head 6: Recovery 0.07
+
+========================================
+Running Cumulative Patching on Top 10 Heads
+========================================
+Baseline Clean:   0.8236
+Baseline Corrupt: 0.2317
+--------------------
+Top 1 Heads: Score 0.2807 | Recovery 0.08
+Top 2 Heads: Score 0.3229 | Recovery 0.15
+Top 3 Heads: Score 0.3804 | Recovery 0.25
+Top 4 Heads: Score 0.4121 | Recovery 0.30
+Top 5 Heads: Score 0.4537 | Recovery 0.37
+Top 6 Heads: Score 0.5041 | Recovery 0.46
+Top 7 Heads: Score 0.5604 | Recovery 0.56
+Top 8 Heads: Score 0.5966 | Recovery 0.62
+Top 9 Heads: Score 0.6495 | Recovery 0.71
+Top 10 Heads: Score 0.6882 | Recovery 0.77
+
+========================================
+Running MLP Sweep (Feed Forward Layers)
+========================================
+MLP Layer 0: Recovery 0.93
+MLP Layer 1: Recovery 0.11
+MLP Layer 2: Recovery -0.03
+MLP Layer 3: Recovery -0.16
+MLP Layer 4: Recovery 1.03
+MLP Layer 5: Recovery 0.00
+WINNER for Ubiquitin:L4H18 (Recovery: 0.08)
+Processing Ubiquitin (Len: 76)...
+  -> Target: (43, 69) Dist: 26 Score: 0.70
+  -> L4 Recovery: 0.05
+STARTING ANALYSIS: Protein G
+Scanning contacts for sequence length 56...
+Selected Target: Indices (40, 53) | Separation: 13 | Score: 0.9959
+Attention Head Sweep
+
+ : Protein G Results
+Clean: 0.9959 | Corrupt:  0.2552 | Delta:  0.7407
+  Layer 1 Head 3: Recovery 0.05
+  Layer 4 Head 13: Recovery 0.05
+  Layer 0 Head 4: Recovery 0.04
+
+========================================
+Running Cumulative Patching on Top 10 Heads
+========================================
+Baseline Clean:   0.9959
+Baseline Corrupt: 0.2552
+--------------------
+Top 1 Heads: Score 0.2938 | Recovery 0.05
+Top 2 Heads: Score 0.3371 | Recovery 0.11
+Top 3 Heads: Score 0.3814 | Recovery 0.17
+Top 4 Heads: Score 0.4374 | Recovery 0.25
+Top 5 Heads: Score 0.5111 | Recovery 0.35
+Top 6 Heads: Score 0.5348 | Recovery 0.38
+Top 7 Heads: Score 0.5893 | Recovery 0.45
+Top 8 Heads: Score 0.6403 | Recovery 0.52
+Top 9 Heads: Score 0.6957 | Recovery 0.59
+Top 10 Heads: Score 0.7152 | Recovery 0.62
+
+========================================
+Running MLP Sweep (Feed Forward Layers)
+========================================
+MLP Layer 0: Recovery 0.93
+MLP Layer 1: Recovery 0.22
+MLP Layer 2: Recovery 0.44
+MLP Layer 3: Recovery 0.73
+MLP Layer 4: Recovery 0.39
+MLP Layer 5: Recovery 0.00
+WINNER for Protein G:L1H3 (Recovery: 0.05)
+Processing Protein G (Len: 56)...
+  -> Target: (29, 53) Dist: 24 Score: 0.71
+  -> L4 Recovery: 0.02
+STARTING ANALYSIS: Protein A
+Scanning contacts for sequence length 59...
+Processing Protein A (Len: 59)...
+  -> Skipping (No strong long-range contacts > 10 residues)
+Protein A skipped for MLP plot
+STARTING ANALYSIS: SH3 Domain
+Scanning contacts for sequence length 61...
+Selected Target: Indices (28, 44) | Separation: 16 | Score: 0.8445
+Attention Head Sweep
+
+ : SH3 Domain Results
+Clean: 0.8445 | Corrupt:  0.3929 | Delta:  0.4516
+  Layer 1 Head 13: Recovery 0.30
+  Layer 2 Head 14: Recovery 0.25
+  Layer 1 Head 15: Recovery 0.23
+
+========================================
+Running Cumulative Patching on Top 10 Heads
+========================================
+Baseline Clean:   0.8445
+Baseline Corrupt: 0.3929
+--------------------
+Top 1 Heads: Score 0.5271 | Recovery 0.30
+Top 2 Heads: Score 0.6447 | Recovery 0.56
+Top 3 Heads: Score 0.7191 | Recovery 0.72
+Top 4 Heads: Score 0.7847 | Recovery 0.87
+Top 5 Heads: Score 0.8287 | Recovery 0.96
+Top 6 Heads: Score 0.8319 | Recovery 0.97
+Top 7 Heads: Score 0.8581 | Recovery 1.03
+Top 8 Heads: Score 0.9058 | Recovery 1.14
+Top 9 Heads: Score 0.9313 | Recovery 1.19
+Top 10 Heads: Score 0.9581 | Recovery 1.25
+
+========================================
+Running MLP Sweep (Feed Forward Layers)
+========================================
+MLP Layer 0: Recovery 0.95
+MLP Layer 1: Recovery 0.11
+MLP Layer 2: Recovery 0.78
+MLP Layer 3: Recovery -0.07
+MLP Layer 4: Recovery 0.06
+MLP Layer 5: Recovery 0.00
+WINNER for SH3 Domain:L1H13 (Recovery: 0.30)
+Processing SH3 Domain (Len: 61)...
+  -> Target: (28, 45) Dist: 17 Score: 0.65
+  -> L4 Recovery: 0.42
+STARTING ANALYSIS: Homeodomain
+Scanning contacts for sequence length 52...
+Processing Homeodomain (Len: 52)...
+  -> Skipping (No strong long-range contacts > 10 residues)
+Homeodomain skipped for MLP plot
+STARTING ANALYSIS: Zinc Finger
+Scanning contacts for sequence length 30...
+Selected Target: Indices (2, 24) | Separation: 22 | Score: 0.9342
+Attention Head Sweep
+
+ : Zinc Finger Results
+Clean: 0.9342 | Corrupt:  0.1838 | Delta:  0.7505
+  Layer 0 Head 2: Recovery 0.03
+  Layer 3 Head 7: Recovery 0.03
+  Layer 4 Head 8: Recovery 0.02
+
+========================================
+Running Cumulative Patching on Top 10 Heads
+========================================
+Baseline Clean:   0.9342
+Baseline Corrupt: 0.1838
+--------------------
+Top 1 Heads: Score 0.2050 | Recovery 0.03
+Top 2 Heads: Score 0.2265 | Recovery 0.06
+Top 3 Heads: Score 0.2420 | Recovery 0.08
+Top 4 Heads: Score 0.2648 | Recovery 0.11
+Top 5 Heads: Score 0.2975 | Recovery 0.15
+Top 6 Heads: Score 0.2937 | Recovery 0.15
+Top 7 Heads: Score 0.2859 | Recovery 0.14
+Top 8 Heads: Score 0.2986 | Recovery 0.15
+Top 9 Heads: Score 0.3083 | Recovery 0.17
+Top 10 Heads: Score 0.3101 | Recovery 0.17
+
+========================================
+Running MLP Sweep (Feed Forward Layers)
+========================================
+MLP Layer 0: Recovery 0.98
+MLP Layer 1: Recovery 0.27
+MLP Layer 2: Recovery 0.27
+MLP Layer 3: Recovery 0.10
+MLP Layer 4: Recovery 0.25
+MLP Layer 5: Recovery 0.00
+WINNER for Zinc Finger:L0H2 (Recovery: 0.03)
+Processing Zinc Finger (Len: 30)...
+  -> Target: (2, 24) Dist: 22 Score: 0.93
+  -> L4 Recovery: 1.06
+STARTING ANALYSIS: WW Domain
+Scanning contacts for sequence length 32...
+Selected Target: Indices (5, 19) | Separation: 14 | Score: 0.8596
+Attention Head Sweep
+
+ : WW Domain Results
+Clean: 0.8596 | Corrupt:  0.1781 | Delta:  0.6815
+  Layer 4 Head 17: Recovery 0.03
+  Layer 1 Head 7: Recovery 0.03
+  Layer 4 Head 12: Recovery 0.03
+
+========================================
+Running Cumulative Patching on Top 10 Heads
+========================================
+Baseline Clean:   0.8596
+Baseline Corrupt: 0.1781
+--------------------
+Top 1 Heads: Score 0.1985 | Recovery 0.03
+Top 2 Heads: Score 0.2206 | Recovery 0.06
+Top 3 Heads: Score 0.2413 | Recovery 0.09
+Top 4 Heads: Score 0.2441 | Recovery 0.10
+Top 5 Heads: Score 0.2443 | Recovery 0.10
+Top 6 Heads: Score 0.2255 | Recovery 0.07
+Top 7 Heads: Score 0.1873 | Recovery 0.01
+Top 8 Heads: Score 0.1660 | Recovery -0.02
+Top 9 Heads: Score 0.1824 | Recovery 0.01
+Top 10 Heads: Score 0.1640 | Recovery -0.02
+
+========================================
+Running MLP Sweep (Feed Forward Layers)
+========================================
+MLP Layer 0: Recovery 0.27
+MLP Layer 1: Recovery 0.01
+MLP Layer 2: Recovery 0.04
+MLP Layer 3: Recovery 0.02
+MLP Layer 4: Recovery 0.20
+MLP Layer 5: Recovery 0.00
+WINNER for WW Domain:L4H17 (Recovery: 0.03)
+Processing WW Domain (Len: 32)...
+  -> Target: (5, 20) Dist: 15 Score: 0.68
+  -> L4 Recovery: 0.45
+STARTING ANALYSIS: Trp-Cage
+Scanning contacts for sequence length 20...
+Processing Trp-Cage (Len: 20)...
+  -> Target: (2, 14) Dist: 12 Score: 0.60
+  -> Skipping (Signal differential too weak: 0.02)
+Trp-Cage skipped for MLP plot
+FINAL HEAD RESULTS -> UNIVERSAL HEADS
+HEAD L4H18 | Wins: 1 | Proteins: ['Ubiquitin']
+HEAD L1H3 | Wins: 1 | Proteins: ['Protein G']
+HEAD L1H13 | Wins: 1 | Proteins: ['SH3 Domain']
+HEAD L0H2 | Wins: 1 | Proteins: ['Zinc Finger']
+HEAD L4H17 | Wins: 1 | Proteins: ['WW Domain']
+
+==============================
+AGGREGATE RESULTS (N=5)
+==============================
+Layer | Mean Rec | Std Dev
+-------------------------
+MLP 0 |    0.66  |  0.25
+MLP 1 |    0.14  |  0.12
+MLP 2 |    0.02  |  0.07
+MLP 3 |    0.13  |  0.21
+MLP 4 |    0.40  |  0.37
+MLP 5 |    0.00  |  0.00
