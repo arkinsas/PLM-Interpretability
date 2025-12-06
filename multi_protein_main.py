@@ -7,7 +7,7 @@ import torch
 from hooks import PatchManager
 from main import run_single_protein_analysis
 from protein_config import Protein
-from utils import create_corrupted_shuffled
+from utils import create_corrupted_shuffled, create_corrupted_swapped
 
 
 def get_best_contact(model, alphabet, sequence, device):
@@ -53,7 +53,8 @@ def run_experiment(model, alphabet, device, name, seq):
     (t_i, t_j), clean_score = result
     print(f"  -> Target: ({t_i}, {t_j}) Dist: {t_j - t_i} Score: {clean_score:.2f}")
 
-    corr_seq = create_corrupted_shuffled(seq, t_i, t_j)
+    #corr_seq = create_corrupted_shuffled(seq, t_i, t_j)
+    corr_seq = create_corrupted_swapped(seq, t_i, t_j, Protein.get_all_proteins())
 
     batch_converter = alphabet.get_batch_converter()
     _, _, clean_toks = batch_converter([("c", seq)])
