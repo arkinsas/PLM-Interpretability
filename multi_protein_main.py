@@ -7,20 +7,7 @@ import seaborn as sns
 from hooks import PatchManager
 from utils import create_corrupted_shuffled
 from main import run_single_protein_analysis
-
-# ==========================================
-# 0. The Dataset (Diverse Folds)
-# ==========================================
-PROTEINS = [
-    ("Ubiquitin", "MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG"),
-    ("Protein G", "MTYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE"),
-    ("Protein A", "MNAAQHDEAQQNAFYQVLNMPNLNADQRNGFIQSLKDDPSQSANVLGEAQKLNDSQAPK"),
-    ("SH3 Domain", "DETGKELVLALYDYQEKSPREVTMKKGDILTLLNSTNKDWWKVEVNDRQGFVPAAYVKKLD"),
-    ("Homeodomain", "RRRKRTAEREAELQKIVSEPGDSVKKKEGERLKQLYIEQSNKNRAIKRLEIQ"),
-    ("Zinc Finger", "YKCGLCERSFVEKSALSRHQKRHTGEKPYK"),
-    ("WW Domain", "PLPAGWEMAKTSSGQRYFLNHIDQTTTWQDPR"),
-    ("Trp-Cage", "DAYAQWLKDGGPSSGRPPPS"),
-]
+from protein_config import Protein
 
 # ==========================================
 # 1. Helpers
@@ -132,7 +119,7 @@ def main():
 
     print(f"STARTING MULTI-PROTEIN SWEEP")
 
-    for name, seq in PROTEINS:
+    for name, seq in Protein.get_all_proteins():
         res = run_single_protein_analysis(model, alphabet, device, name, seq)
 
         # find the universal head
