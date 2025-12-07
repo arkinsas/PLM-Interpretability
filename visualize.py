@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 
 import esm
@@ -18,11 +19,17 @@ def plot_head_attention(
     contact_pair=None,
     device="cpu",
     save_path=None,
+    protein_name=None,
+    is_corrupted=False,
 ):
     """
     Plots the attention heatmap for a specific Layer/Head.
     Highlights the contact_pair (i, j) if provided.
     Handles variable tensor shapes from different ESM versions.
+
+    Args:
+        is_corrupted: Whether this is a corrupted sequence (for title annotation)
+        protein_name: Name of protein (for title)
     """
     print(f"Visualizing Layer {layer} Head {head}...")
 
@@ -63,7 +70,14 @@ def plot_head_attention(
 
     ax = sns.heatmap(attn_matrix, cmap="viridis", square=True)
 
-    plt.title(f"Attention Map: Layer {layer} Head {head}")
+    # Build title
+    seq_type = " [CORRUPTED]" if is_corrupted else ""
+    protein_prefix = f"{protein_name}{seq_type} - " if protein_name else ""
+    title = f"{protein_prefix}Layer {layer} Head {head}"
+    if contact_pair:
+        title += f"\nContact: {contact_pair}"
+
+    plt.title(title)
     plt.xlabel("Key Position (Source)")
     plt.ylabel("Query Position (Destination)")
 
@@ -95,7 +109,6 @@ def main():
     parser.add_argument(
         "--protein",
         type=str,
-        choices=[p.name for p in Protein],
         help="Specific protein to visualize (if not set, all proteins will be visualized)",
     )
     parser.add_argument(
@@ -103,6 +116,11 @@ def main():
         type=str,
         default="visualizations",
         help="Output directory for visualizations",
+    )
+    parser.add_argument(
+        "--use-corrupted",
+        action="store_true",
+        help="Use corrupted sequences from experimental metadata (requires results/experimental_metadata.json)",
     )
     args = parser.parse_args()
 
@@ -115,30 +133,82 @@ def main():
     # Create output directory
     os.makedirs(args.output_dir, exist_ok=True)
 
+    # Load experimental metadata if available (for contact pairs and optional corrupted sequences)
+    experimental_metadata = None
+    metadata_path = "results/experimental_metadata.json"
+    if os.path.exists(metadata_path):
+        with open(metadata_path, "r") as f:
+            experimental_metadata = json.load(f)
+        print(f"Loaded experimental metadata for {len(experimental_metadata)} proteins")
+        print("Using contact pairs from experimental metadata")
+    elif args.use_corrupted:
+        print(f"ERROR: {metadata_path} not found!")
+        print("Please run multi_protein_main.py first to generate experimental metadata.")
+        return
+    else:
+        print(f"WARNING: {metadata_path} not found. Contact pairs will not be highlighted.")
+        print("Run multi_protein_main.py first to generate experimental metadata with contact pairs.")
+
     # Determine which proteins to process
-    proteins_to_process = [Protein[args.protein]] if args.protein else list(Protein)
+    if args.protein:
+        # Single protein specified
+        if args.use_corrupted and args.protein not in experimental_metadata:
+            print(f"ERROR: No metadata found for protein '{args.protein}'")
+            print(f"Available proteins: {list(experimental_metadata.keys())}")
+            return
+        proteins_to_process = [args.protein]
+    else:
+        # All proteins
+        if args.use_corrupted:
+            proteins_to_process = list(experimental_metadata.keys())
+        else:
+            proteins_to_process = [p.protein_name for p in Protein]
 
-    for protein in proteins_to_process:
-        print(f"\nProcessing {protein.protein_name}...")
+    for protein_name in proteins_to_process:
+        print(f"\nProcessing {protein_name}...")
 
-        # Use default contact pair for Ubiquitin, None for others
-        target_contact = (1, 17) if protein == Protein.UBIQUITIN else None
+        # Get contact pair from metadata if available
+        contact_pair = None
+        if experimental_metadata and protein_name in experimental_metadata:
+            contact_pair = tuple(experimental_metadata[protein_name]["contact_pair"])
+
+        if args.use_corrupted:
+            # Use corrupted sequence from metadata
+            metadata = experimental_metadata[protein_name]
+            sequence = metadata["corrupted_sequence"]
+            is_corrupted = True
+            print(f"  Using CORRUPTED sequence")
+            print(f"  Contact: {contact_pair}")
+            print(f"  Corruption method: {metadata['corruption_method']}")
+        else:
+            # Use clean sequence
+            protein = next(p for p in Protein if p.protein_name == protein_name)
+            sequence = protein.sequence
+            is_corrupted = False
+            print(f"  Using CLEAN sequence")
+            if contact_pair:
+                print(f"  Contact: {contact_pair}")
+            else:
+                print(f"  No contact pair available (run multi_protein_main.py first)")
 
         # Generate filename
-        safe_name = protein.protein_name.replace(" ", "_").lower()
+        safe_name = protein_name.replace(" ", "_").lower()
+        seq_suffix = "_corrupted" if is_corrupted else ""
         save_path = os.path.join(
-            args.output_dir, f"{safe_name}_L{args.layer}H{args.head}.png"
+            args.output_dir, f"{safe_name}_L{args.layer}H{args.head}{seq_suffix}.png"
         )
 
         plot_head_attention(
             model,
             alphabet,
-            protein.sequence,
+            sequence,
             layer=args.layer,
             head=args.head,
-            contact_pair=target_contact,
+            contact_pair=contact_pair,
             device=device,
             save_path=save_path,
+            protein_name=protein_name,
+            is_corrupted=is_corrupted,
         )
 
     print(f"\nAll visualizations saved to {args.output_dir}/")

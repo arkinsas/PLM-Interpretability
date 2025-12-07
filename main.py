@@ -3,7 +3,13 @@ import torch
 
 from contact_patching import run_contact_sweep
 from hooks import PatchManager
-from utils import create_corrupted_shuffled
+from protein_config import Protein
+from utils import create_corrupted_shuffled, create_corrupted_swapped
+
+# CONFIGURATION: Choose corruption method
+# Options: "shuffled" or "swapped"
+# NOTE: This should match the setting in multi_protein_main.py
+CORRUPTION_METHOD = "swapped"
 
 
 def get_best_long_range_contact(model, alphabet, sequence, device):
@@ -159,7 +165,15 @@ def run_single_protein_analysis(model, alphabet, device, name, sequence):
 
     (t_i, t_j), score = result
 
-    corrupted_seq = create_corrupted_shuffled(sequence, t_i, t_j)
+    # Apply corruption based on configuration
+    if CORRUPTION_METHOD == "shuffled":
+        corrupted_seq = create_corrupted_shuffled(sequence, t_i, t_j)
+    elif CORRUPTION_METHOD == "swapped":
+        corrupted_seq = create_corrupted_swapped(sequence, t_i, t_j, Protein.get_all_proteins())
+    else:
+        raise ValueError(f"Unknown corruption method: {CORRUPTION_METHOD}")
+
+    print(f"Using corruption method: {CORRUPTION_METHOD}")
     pairs = [(sequence, corrupted_seq, (t_i, t_j))]
 
     print("Attention Head Sweep")
