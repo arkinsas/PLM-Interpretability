@@ -62,7 +62,9 @@ python slurm/run_trial.py \\
 def main():
     parser = argparse.ArgumentParser(description="Submit robustness test jobs")
     parser.add_argument("--start-trial", type=int, default=0, help="Start trial number")
-    parser.add_argument("--end-trial", type=int, required=True, help="End trial number (exclusive)")
+    parser.add_argument(
+        "--end-trial", type=int, required=True, help="End trial number (exclusive)"
+    )
     parser.add_argument("--protein", type=str, help="Single protein (default: all)")
     parser.add_argument("--output-dir", type=str, default="results/robustness_trials")
     parser.add_argument("--slurm-dir", type=str, default="slurm/scripts")
@@ -77,8 +79,12 @@ def main():
     if num_trials > 500:
         print(f"ERROR: Cannot submit {num_trials} trials (max 500 per batch)")
         print(f"Submit in batches:")
-        print(f"  python slurm/submit_jobs.py --start-trial {args.start_trial} --end-trial {args.start_trial + 500}")
-        print(f"  python slurm/submit_jobs.py --start-trial {args.start_trial + 500} --end-trial {args.end_trial}")
+        print(
+            f"  python slurm/submit_jobs.py --start-trial {args.start_trial} --end-trial {args.start_trial + 500}"
+        )
+        print(
+            f"  python slurm/submit_jobs.py --start-trial {args.start_trial + 500} --end-trial {args.end_trial}"
+        )
         return 1
 
     # Setup
@@ -93,11 +99,15 @@ def main():
 
     total_jobs = len(proteins) * num_trials
     if total_jobs > 500:
-        print(f"ERROR: {len(proteins)} proteins × {num_trials} trials = {total_jobs} jobs (max 500)")
+        print(
+            f"ERROR: {len(proteins)} proteins × {num_trials} trials = {total_jobs} jobs (max 500)"
+        )
         print(f"Submit one protein at a time or reduce trials")
         return 1
 
-    print(f"Submitting: {len(proteins)} proteins, trials {args.start_trial}-{args.end_trial - 1} ({num_trials} each)")
+    print(
+        f"Submitting: {len(proteins)} proteins, trials {args.start_trial}-{args.end_trial - 1} ({num_trials} each)"
+    )
     print(f"Total jobs: {total_jobs}\n")
 
     for protein_name in proteins:
@@ -115,7 +125,9 @@ def main():
         if args.dry_run:
             print(f"{protein_name}: Created {script_path}")
         else:
-            result = subprocess.run(["sbatch", str(script_path)], capture_output=True, text=True)
+            result = subprocess.run(
+                ["sbatch", str(script_path)], capture_output=True, text=True
+            )
             if result.returncode == 0:
                 job_id = result.stdout.strip().split()[-1]
                 print(f"{protein_name}: Submitted job {job_id}")

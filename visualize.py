@@ -135,11 +135,17 @@ def main():
         print("Using contact pairs from experimental metadata")
     elif args.use_corrupted:
         print(f"ERROR: {metadata_path} not found!")
-        print("Please run multi_protein_main.py first to generate experimental metadata.")
+        print(
+            "Please run multi_protein_main.py first to generate experimental metadata."
+        )
         return
     else:
-        print(f"WARNING: {metadata_path} not found. Contact pairs will not be highlighted.")
-        print("Run multi_protein_main.py first to generate experimental metadata with contact pairs.")
+        print(
+            f"WARNING: {metadata_path} not found. Contact pairs will not be highlighted."
+        )
+        print(
+            "Run multi_protein_main.py first to generate experimental metadata with contact pairs."
+        )
 
     # Determine which proteins to process
     if args.protein:

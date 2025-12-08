@@ -51,9 +51,7 @@ def aggregate_protein_results(protein_name, trial_files, output_format="json"):
             "appearance_rate": count / num_trials,
             "avg_recovery": sum(r["recovery"] for r in head_recoveries[head])
             / len(head_recoveries[head]),
-            "std_recovery": _std(
-                [r["recovery"] for r in head_recoveries[head]]
-            ),
+            "std_recovery": _std([r["recovery"] for r in head_recoveries[head]]),
             "avg_rank": sum(r["rank"] for r in head_recoveries[head])
             / len(head_recoveries[head]),
         }
@@ -166,17 +164,13 @@ def save_summary_csv(summary, output_file):
         writer.writerow(["num_trials", summary["num_trials"]])
         writer.writerow(["avg_clean_score", summary["avg_clean_score"]])
         writer.writerow(["avg_corrupted_score", summary["avg_corrupted_score"]])
-        writer.writerow(
-            ["contact_pairs", str(summary["contact_pairs"])]
-        )
+        writer.writerow(["contact_pairs", str(summary["contact_pairs"])])
 
     return [heads_file, layers_file, meta_file]
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Aggregate robustness test results"
-    )
+    parser = argparse.ArgumentParser(description="Aggregate robustness test results")
     parser.add_argument(
         "--trials-dir",
         type=str,
@@ -239,9 +233,7 @@ def main():
         print(f"found {len(trial_files)} trials")
 
         if args.trials and len(trial_files) != args.trials:
-            print(
-                f"  WARNING: Expected {args.trials} trials, found {len(trial_files)}"
-            )
+            print(f"  WARNING: Expected {args.trials} trials, found {len(trial_files)}")
 
         # Aggregate results
         summary = aggregate_protein_results(
@@ -254,7 +246,8 @@ def main():
             # Save per-protein file
             num_trials = len(trial_files)
             output_file = (
-                output_dir / f"robustness_{num_trials}_{protein_name}.{args.output_format}"
+                output_dir
+                / f"robustness_{num_trials}_{protein_name}.{args.output_format}"
             )
 
             if args.output_format == "json":

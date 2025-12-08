@@ -21,7 +21,9 @@ def create_corrupted_shuffled(sequence, tensor_idx_i, tensor_idx_j):
 
     return "".join(seq_list)
 
+
 import random
+
 
 def create_corrupted_swapped(sequence, tensor_idx_i, tensor_idx_j, dataset):
     """
@@ -47,11 +49,11 @@ def create_corrupted_swapped(sequence, tensor_idx_i, tensor_idx_j, dataset):
     # grafting
     for _ in range(20):
         donor_seq = random.choice(potential_donors)
-        
+
         if len(donor_seq) >= span_len:
             max_start = len(donor_seq) - span_len
             start_idx = random.randint(0, max_start)
-            
+
             grafted_span = donor_seq[start_idx : start_idx + span_len]
 
             new_sequence = sequence[:span_start] + grafted_span + sequence[span_end:]

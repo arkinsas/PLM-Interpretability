@@ -169,7 +169,9 @@ def run_single_protein_analysis(model, alphabet, device, name, sequence):
     if CORRUPTION_METHOD == "shuffled":
         corrupted_seq = create_corrupted_shuffled(sequence, t_i, t_j)
     elif CORRUPTION_METHOD == "swapped":
-        corrupted_seq = create_corrupted_swapped(sequence, t_i, t_j, Protein.get_all_proteins())
+        corrupted_seq = create_corrupted_swapped(
+            sequence, t_i, t_j, Protein.get_all_proteins()
+        )
     else:
         raise ValueError(f"Unknown corruption method: {CORRUPTION_METHOD}")
 

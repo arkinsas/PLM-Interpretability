@@ -80,7 +80,9 @@ def main():
     metadata_path = "results/experimental_metadata.json"
     if not os.path.exists(metadata_path):
         print(f"ERROR: {metadata_path} not found!")
-        print("Please run multi_protein_main.py first to generate experimental metadata.")
+        print(
+            "Please run multi_protein_main.py first to generate experimental metadata."
+        )
         return
 
     with open(metadata_path, "r") as f:
@@ -99,7 +101,9 @@ def main():
 
     print(f"Model loaded: {num_layers} layers, {num_heads} heads per layer")
     print(f"Loaded metadata for {len(experimental_metadata)} proteins")
-    print(f"Total visualizations: {len(experimental_metadata) * num_layers * num_heads}")
+    print(
+        f"Total visualizations: {len(experimental_metadata) * num_layers * num_heads}"
+    )
 
     # Create output directory
     output_base = Path("visualizations_corrupted")
@@ -108,13 +112,13 @@ def main():
     # Process each protein from experimental metadata
     total_count = 0
     for protein_name, metadata in experimental_metadata.items():
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"Processing: {protein_name}")
         print(f"Contact: {tuple(metadata['contact_pair'])}")
         print(f"Corruption: {metadata['corruption_method']}")
         print(f"Clean score: {metadata['clean_score']:.4f}")
         print(f"Corrupted score: {metadata['corrupted_score']:.4f}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         contact_pair = tuple(metadata["contact_pair"])
         corrupted_sequence = metadata["corrupted_sequence"]
@@ -165,14 +169,16 @@ def main():
 
         print(f"✓ {protein_name} complete ({num_layers * num_heads} visualizations)")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"ALL VISUALIZATIONS COMPLETE")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Total visualizations generated: {total_count}")
     print(f"Output directory: {output_base}/")
     print(f"\nEach protein directory contains:")
     print(f"  - experiment_info.txt (metadata and top heads)")
-    print(f"  - L00H00.png ... L{num_layers-1:02d}H{num_heads-1:02d}.png (attention maps)")
+    print(
+        f"  - L00H00.png ... L{num_layers - 1:02d}H{num_heads - 1:02d}.png (attention maps)"
+    )
     print(
         f"\nThese visualizations use the CORRUPTED sequences from the causal tracing experiments."
     )
