@@ -1,0 +1,128 @@
+{
+  "protein_name": "Zinc Finger",
+  "num_trials": 1000,
+  "contact_pairs": [
+    [
+      2,
+      24
+    ]
+  ],
+  "avg_clean_score": 0.9342335869073868,
+  "avg_corrupted_score": 0.2204635696262121,
+  "head_statistics": {
+    "L3H7": {
+      "appearances": 672,
+      "appearance_rate": 0.672,
+      "avg_recovery": 0.043618184209446464,
+      "std_recovery": 0.04087163596243196,
+      "avg_rank": 4.325892857142857
+    },
+    "L4H11": {
+      "appearances": 595,
+      "appearance_rate": 0.595,
+      "avg_recovery": 0.03768674456083975,
+      "std_recovery": 0.03209486545776379,
+      "avg_rank": 4.892436974789916
+    },
+    "L4H3": {
+      "appearances": 557,
+      "appearance_rate": 0.557,
+      "avg_recovery": 0.07147413298246891,
+      "std_recovery": 0.07445293995101195,
+      "avg_rank": 3.073608617594255
+    },
+    "L0H2": {
+      "appearances": 484,
+      "appearance_rate": 0.484,
+      "avg_recovery": 0.03248773833875321,
+      "std_recovery": 0.020655966943816547,
+      "avg_rank": 5.599173553719008
+    },
+    "L4H6": {
+      "appearances": 467,
+      "appearance_rate": 0.467,
+      "avg_recovery": 0.036417946241381206,
+      "std_recovery": 0.016031595348023814,
+      "avg_rank": 4.398286937901499
+    },
+    "L4H1": {
+      "appearances": 390,
+      "appearance_rate": 0.39,
+      "avg_recovery": 0.0338233456803629,
+      "std_recovery": 0.01887060011667436,
+      "avg_rank": 5.828205128205128
+    },
+    "L4H2": {
+      "appearances": 376,
+      "appearance_rate": 0.376,
+      "avg_recovery": 0.034640926186569984,
+      "std_recovery": 0.020158865410972976,
+      "avg_rank": 5.656914893617022
+    },
+    "L4H8": {
+      "appearances": 372,
+      "appearance_rate": 0.372,
+      "avg_recovery": 0.027402713889836946,
+      "std_recovery": 0.00893055913776406,
+      "avg_rank": 5.483870967741935
+    },
+    "L4H19": {
+      "appearances": 372,
+      "appearance_rate": 0.372,
+      "avg_recovery": 0.040565394581125305,
+      "std_recovery": 0.030212445834376888,
+      "avg_rank": 5.309139784946237
+    },
+    "L2H2": {
+      "appearances": 349,
+      "appearance_rate": 0.349,
+      "avg_recovery": 0.03906490650017316,
+      "std_recovery": 0.029347063379335563,
+      "avg_rank": 5.873925501432665
+    }
+  },
+  "layer_statistics": {
+    "L0": {
+      "num_observations": 1000,
+      "mean_recovery": 1.0305773014470583,
+      "std_recovery": 0.05158846864872841,
+      "min_recovery": 0.7536689038938679,
+      "max_recovery": 1.1913960226126037
+    },
+    "L1": {
+      "num_observations": 1000,
+      "mean_recovery": 0.3428172803730124,
+      "std_recovery": 0.23595499205904844,
+      "min_recovery": -0.404190911361407,
+      "max_recovery": 1.009539409301329
+    },
+    "L2": {
+      "num_observations": 1000,
+      "mean_recovery": 0.22814802835258388,
+      "std_recovery": 0.16526386270523793,
+      "min_recovery": -0.6828720150892716,
+      "max_recovery": 0.7584839439631542
+    },
+    "L3": {
+      "num_observations": 1000,
+      "mean_recovery": -0.012919097701505474,
+      "std_recovery": 0.11819488519242462,
+      "min_recovery": -1.0150429818250766,
+      "max_recovery": 0.2601521435822394
+    },
+    "L4": {
+      "num_observations": 1000,
+      "mean_recovery": 0.4268747360361728,
+      "std_recovery": 0.1903349560897132,
+      "min_recovery": 0.026380783978439654,
+      "max_recovery": 1.2094977540452694
+    },
+    "L5": {
+      "num_observations": 1000,
+      "mean_recovery": 0.0,
+      "std_recovery": 0.0,
+      "min_recovery": 0.0,
+      "max_recovery": 0.0
+    }
+  }
+}

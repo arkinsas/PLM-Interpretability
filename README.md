@@ -1,70 +1,80 @@
-# rl-plm
+# Mechanistic Interpretability for ESM-2 Protein Language Models
 
+Activation patching to identify which attention heads and MLP layers in ESM-2 are causally responsible for predicting long-range protein contacts.
 
-## Using the hook utilities
+## Quick Start
 
-- `hooks.py` provides `PatchManager` to record activations from a clean run and patch them into a corrupted run.
-- `activation_patching.py` has helpers: `patch_single_head` (one head) and `sweep_heads_once` (loop over all heads).
+```bash
+# Setup
+uv sync
 
-Basic flow:
-```python
-from hooks import PatchManager
-from activation_patching import patch_single_head
+# Single protein analysis
+python main.py
 
-pm = PatchManager(model, device)
+# Multi-protein analysis (find universal heads)
+python multi_protein_main.py
 
-# Run clean (records) and corrupted, then patch a single head
-res = patch_single_head(
-    patch_manager=pm,
-    layer=0,
-    head=0,
-    clean_batch={"tokens": clean_tokens},
-    corrupted_batch={"tokens": corrupted_tokens},
-    forward_fn=lambda b: model(**b)["logits"],
-    metric_fn=lambda logits: float(logits.mean()),  # replace with your metric
-)
-print(res)
+# Attention visualizations
+python visualize.py
 ```
 
-To sweep all heads:
-```python
-from activation_patching import sweep_heads_once
-pm = PatchManager(model, device)
-res = sweep_heads_once(
-    patch_manager=pm,
-    num_layers=len(model.layers),
-    num_heads=model.layers[0].self_attn.num_heads,
-    clean_batch={"tokens": clean_tokens},
-    corrupted_batch={"tokens": corrupted_tokens},
-    forward_fn=lambda b: model(**b)["logits"],
-    metric_fn=metric_fn,  # your scalar metric
-)
-print(res["head_results"])  # list of dicts with layer/head/recovery
+## Robustness Testing on PACE
+
+Run hundreds of corruption trials in parallel.
+
+```bash
+# Submit 500 trials for one protein
+python slurm/submit_jobs.py --protein Ubiquitin --start-trial 0 --end-trial 500
+
+# Monitor and aggregate
+squeue -u $USER
+python slurm/aggregate_results.py
 ```
 
-## Running current activation patching
+**Output:**
+- Individual trials: `results/robustness_trials/Ubiquitin_trial_00000.json`
+- Aggregated summaries: `results/robustness_summaries/robustness_500_Ubiquitin.json`
 
-Made run_head_sweep(model, alphabet, device: torch.device, pairs: List[Tuple[str, str, int]], batch_size: int = 4). This runs the sweep_heads_once form activation_patching.py on the list of pairs passed in. Pairs should have format of (cleansequence, corruptedsequence, maskpos). It returns a dict with per-pair sweep results (pairs: clean/corrupted metrics and head recoveries for each input) and averaged_head_recovery (head recoveries averaged across all pairs). Once a system for making the list of pairs is created (list of valid protein sequences and functions to corrupt them), run_head_sweep can be used to get results. 
+## Project Structure
 
-## current step by step
+**Core Analysis:**
+- `main.py` - Single protein activation patching pipeline
+- `multi_protein_main.py` - Cross-protein analysis to find universal heads
+- `activation_patching.py` - Head-level patching (sweep all attention heads)
+- `contact_patching.py` - Contact-based patching wrapper for protein pairs
+- `hooks.py` - PatchManager for recording/patching activations via PyTorch hooks
 
-1. install fair-esm if not done already
- ```pip install fair-esm```
-2. pre-load a model (optional, but it takes a long time to load the larger versions of esm2 so id suggest running it because itll store the model in a cache and it will be ready to use once pre-loaded)
-```python load_esm2.py --model (choose between esm2_t6_8M_UR50D, esm2_t12_35M_UR50D, esm2_t30_150M_UR50D, esm2_t33_650M_UR50D, esm2_t36_3B_UR50D, esm2_t48_15B_UR50D)```
-3. rn the only thing ready to run is sweep_test, which is an example of how to run the attention patching.
-```python sweep_test.py```
+**Utilities:**
+- `protein_config.py` - Protein sequences and configurations (8 test proteins)
+- `utils.py` - Corruption functions (shuffled/swapped sequence generation)
+- `load_esm2.py` - ESM-2 model loader utility
 
-## TO-DOs
--Make a list of valid protein strings to use as the clean sequences
--Create system for corrupting strings. Swaps, deletions etc
--use the above two to create a list of tuples of the following form (cleansequence, corruptedsequence, maskposition). The mask position will be the protein/letter that is hidden from esm2 and which it will try to predict. randomizing mask position makes the most senese i think
--store/analyze results
+**Visualization:**
+- `visualize.py` - Generate attention heatmaps for specific heads
+- `visualize_all_heads.py` - Generate visualizations for all heads across all proteins
 
-## uneccesary  to-dos
--we can also do other ways of selecting the head/heads that are to be patched. Rn it does one at a time. After the recovery scores for each head are computed individually could try activating the highest ones together to see if that helps more than individually. Or the lowest to see if together they are important even though their scores are low
+**SLURM Robustness Testing:**
+- `slurm/submit_jobs.py` - Submit parallel SLURM jobs (respects PACE-ICE 500 job limit)
+- `slurm/run_trial.py` - Run single robustness trial (called by SLURM)
+- `slurm/aggregate_results.py` - Aggregate trial results into summary statistics
 
-- Only the attention outputs and the output of the NNs are patched. Could get more finegrained and patch attention weights or other parts
+## Models Supported
 
-## miscellaneious
-the sweep_test serves as a good example of how run the sweep runner. Also if making a new way of activation patching, sweep runner serves as a good example of a wrapper.
+ESM-2 models (8M to 15B parameters):
+- `esm2_t6_8M_UR50D`
+- `esm2_t12_35M_UR50D`
+- `esm2_t30_150M_UR50D`
+- `esm2_t33_650M_UR50D`
+- `esm2_t36_3B_UR50D`
+- `esm2_t48_15B_UR50D`
+
+## Dependencies
+
+- PyTorch 2.9.1+
+- fair-esm 2.0.0+
+- matplotlib, seaborn
+- numpy
+
+## Test Proteins
+
+8 well-characterized proteins: Ubiquitin (76aa), Protein G (56aa), SH3 Domain (57aa), WW Domain (34aa), Villin Headpiece (35aa), Trp-cage (20aa), Homeodomain (60aa), Zinc Finger (28aa)

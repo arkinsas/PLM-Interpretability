@@ -1,0 +1,128 @@
+{
+  "protein_name": "Ubiquitin",
+  "num_trials": 1000,
+  "contact_pairs": [
+    [
+      43,
+      69
+    ]
+  ],
+  "avg_clean_score": 0.7029670608043671,
+  "avg_corrupted_score": 0.08890182508155703,
+  "head_statistics": {
+    "L4H9": {
+      "appearances": 942,
+      "appearance_rate": 0.942,
+      "avg_recovery": 0.11707580969135045,
+      "std_recovery": 0.1875694024934182,
+      "avg_rank": 2.4585987261146496
+    },
+    "L4H19": {
+      "appearances": 813,
+      "appearance_rate": 0.813,
+      "avg_recovery": 0.11244568808249406,
+      "std_recovery": 0.27494352954793816,
+      "avg_rank": 3.3813038130381305
+    },
+    "L4H4": {
+      "appearances": 765,
+      "appearance_rate": 0.765,
+      "avg_recovery": 0.1173673444564509,
+      "std_recovery": 0.2112952985388835,
+      "avg_rank": 3.98562091503268
+    },
+    "L4H0": {
+      "appearances": 656,
+      "appearance_rate": 0.656,
+      "avg_recovery": 0.0722336180695537,
+      "std_recovery": 0.10757405708598805,
+      "avg_rank": 4.757621951219512
+    },
+    "L4H3": {
+      "appearances": 630,
+      "appearance_rate": 0.63,
+      "avg_recovery": 0.1569445028328263,
+      "std_recovery": 0.28823746658308635,
+      "avg_rank": 3.3301587301587303
+    },
+    "L4H5": {
+      "appearances": 492,
+      "appearance_rate": 0.492,
+      "avg_recovery": 0.03854006607316404,
+      "std_recovery": 0.07047845646492916,
+      "avg_rank": 6.485772357723577
+    },
+    "L4H13": {
+      "appearances": 317,
+      "appearance_rate": 0.317,
+      "avg_recovery": 0.034554678420844705,
+      "std_recovery": 0.044805808551914954,
+      "avg_rank": 6.198738170347003
+    },
+    "L4H12": {
+      "appearances": 285,
+      "appearance_rate": 0.285,
+      "avg_recovery": 0.033546752243286425,
+      "std_recovery": 0.0634134700611161,
+      "avg_rank": 6.614035087719298
+    },
+    "L2H13": {
+      "appearances": 274,
+      "appearance_rate": 0.274,
+      "avg_recovery": 0.0743184568594978,
+      "std_recovery": 0.14761427221438628,
+      "avg_rank": 5.744525547445256
+    },
+    "L4H8": {
+      "appearances": 224,
+      "appearance_rate": 0.224,
+      "avg_recovery": 0.039918963406567594,
+      "std_recovery": 0.15775715865931578,
+      "avg_rank": 6.821428571428571
+    }
+  },
+  "layer_statistics": {
+    "L0": {
+      "num_observations": 1000,
+      "mean_recovery": 0.8218192652223173,
+      "std_recovery": 0.25372244038902925,
+      "min_recovery": 0.08353750418734117,
+      "max_recovery": 2.013619492957344
+    },
+    "L1": {
+      "num_observations": 1000,
+      "mean_recovery": 0.03693965584101871,
+      "std_recovery": 0.4453387194862781,
+      "min_recovery": -5.630890104724086,
+      "max_recovery": 1.2417863069506225
+    },
+    "L2": {
+      "num_observations": 1000,
+      "mean_recovery": 0.30224450782071083,
+      "std_recovery": 0.44241509489369063,
+      "min_recovery": -1.0469147092200706,
+      "max_recovery": 2.063704311544973
+    },
+    "L3": {
+      "num_observations": 1000,
+      "mean_recovery": 0.09276382889965472,
+      "std_recovery": 0.33899273824933496,
+      "min_recovery": -2.4598822301399106,
+      "max_recovery": 1.474918901345643
+    },
+    "L4": {
+      "num_observations": 1000,
+      "mean_recovery": 0.01828806343675875,
+      "std_recovery": 0.28857173069545355,
+      "min_recovery": -2.008704666575205,
+      "max_recovery": 1.0323191873734683
+    },
+    "L5": {
+      "num_observations": 1000,
+      "mean_recovery": 0.0,
+      "std_recovery": 0.0,
+      "min_recovery": 0.0,
+      "max_recovery": 0.0
+    }
+  }
+}

@@ -1,3 +1,6 @@
+import json
+import os
+
 import esm
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,6 +11,10 @@ from hooks import PatchManager
 from main import run_single_protein_analysis
 from protein_config import Protein
 from utils import create_corrupted_shuffled, create_corrupted_swapped
+
+# CONFIGURATION: Choose corruption method
+# Options: "shuffled" or "swapped"
+CORRUPTION_METHOD = "swapped"
 
 
 def get_best_contact(model, alphabet, sequence, device):
@@ -48,13 +55,20 @@ def run_experiment(model, alphabet, device, name, seq):
 
     if result[0] is None:
         print("  -> Skipping (No strong long-range contacts > 10 residues)")
-        return None
+        return None, None
 
     (t_i, t_j), clean_score = result
     print(f"  -> Target: ({t_i}, {t_j}) Dist: {t_j - t_i} Score: {clean_score:.2f}")
 
-    #corr_seq = create_corrupted_shuffled(seq, t_i, t_j)
-    corr_seq = create_corrupted_swapped(seq, t_i, t_j, Protein.get_all_proteins())
+    # Apply corruption based on configuration
+    if CORRUPTION_METHOD == "shuffled":
+        corr_seq = create_corrupted_shuffled(seq, t_i, t_j)
+    elif CORRUPTION_METHOD == "swapped":
+        corr_seq = create_corrupted_swapped(seq, t_i, t_j, Protein.get_all_proteins())
+    else:
+        raise ValueError(f"Unknown corruption method: {CORRUPTION_METHOD}")
+
+    print(f"  -> Using corruption method: {CORRUPTION_METHOD}")
 
     batch_converter = alphabet.get_batch_converter()
     _, _, clean_toks = batch_converter([("c", seq)])
@@ -74,7 +88,7 @@ def run_experiment(model, alphabet, device, name, seq):
     denom = clean_score - corr_score
     if denom < 0.1:
         print(f"  -> Skipping (Signal differential too weak: {denom:.2f})")
-        return None
+        return None, None
 
     # Sweep MLP Layers
     layer_recoveries = []
@@ -91,7 +105,18 @@ def run_experiment(model, alphabet, device, name, seq):
         layer_recoveries.append(recovery)
 
     print(f"  -> L4 Recovery: {layer_recoveries[4]:.2f}")
-    return layer_recoveries
+
+    # Return metadata along with results
+    metadata = {
+        "clean_sequence": seq,
+        "corrupted_sequence": corr_seq,
+        "contact_pair": [int(t_i), int(t_j)],
+        "corruption_method": CORRUPTION_METHOD,
+        "clean_score": float(clean_score),
+        "corrupted_score": float(corr_score),
+    }
+
+    return layer_recoveries, metadata
 
 
 def main():
@@ -102,6 +127,10 @@ def main():
 
     mlp_results = []
     leaderboard = {}
+    experimental_metadata = {}  # Store metadata for each protein
+
+    # Create results directory
+    os.makedirs("results", exist_ok=True)
 
     print("STARTING MULTI-PROTEIN SWEEP")
 
@@ -122,9 +151,26 @@ def main():
             print(f"WINNER for {name}:{key} (Recovery: {top_head['recovery']:.2f})")
 
         # Complete the MLP sweep for the boxplot
-        mlp_res = run_experiment(model, alphabet, device, name, seq)
+        mlp_res, metadata = run_experiment(model, alphabet, device, name, seq)
         if mlp_res:
             mlp_results.append(mlp_res)
+
+            # Store metadata for this protein
+            if metadata:
+                # Add top head information from run_single_protein_analysis
+                if res:
+                    top_heads = sorted(
+                        res["head_results"], key=lambda x: x["recovery"], reverse=True
+                    )[:10]
+                    metadata["top_heads"] = [
+                        {
+                            "layer": h["layer"],
+                            "head": h["head"],
+                            "recovery": float(h["recovery"]),
+                        }
+                        for h in top_heads
+                    ]
+                experimental_metadata[name] = metadata
         else:
             print(f"{name} skipped for MLP plot")
 
@@ -166,7 +212,22 @@ def main():
 
     plt.grid(axis="y", alpha=0.3)
     plt.tight_layout()
+
+    # Save plot to results directory
+    plot_path = "results/mlp_recovery_boxplot.png"
+    plt.savefig(plot_path, dpi=300, bbox_inches="tight")
+    print(f"\nBox plot saved to {plot_path}")
+
     plt.show()
+
+    # Save experimental metadata to JSON
+    metadata_path = "results/experimental_metadata.json"
+    with open(metadata_path, "w") as f:
+        json.dump(experimental_metadata, f, indent=2)
+    print(f"Experimental metadata saved to {metadata_path}")
+    print("\nAll results saved to results/ directory:")
+    print(f"  - {metadata_path}")
+    print(f"  - {plot_path}")
 
 
 if __name__ == "__main__":
