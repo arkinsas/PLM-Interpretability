@@ -1,0 +1,128 @@
+{
+  "protein_name": "WW Domain",
+  "num_trials": 1000,
+  "contact_pairs": [
+    [
+      5,
+      20
+    ]
+  ],
+  "avg_clean_score": 0.6842361934185028,
+  "avg_corrupted_score": 0.1995609051734209,
+  "head_statistics": {
+    "L4H3": {
+      "appearances": 724,
+      "appearance_rate": 0.724,
+      "avg_recovery": 0.03628355656230812,
+      "std_recovery": 0.02579475585532718,
+      "avg_rank": 3.0497237569060776
+    },
+    "L4H8": {
+      "appearances": 529,
+      "appearance_rate": 0.529,
+      "avg_recovery": 0.04204679329462335,
+      "std_recovery": 0.08718967225800561,
+      "avg_rank": 4.8601134215500945
+    },
+    "L1H13": {
+      "appearances": 494,
+      "appearance_rate": 0.494,
+      "avg_recovery": 0.04289268465855947,
+      "std_recovery": 0.0682954214235939,
+      "avg_rank": 4.2854251012145745
+    },
+    "L4H13": {
+      "appearances": 486,
+      "appearance_rate": 0.486,
+      "avg_recovery": 0.03499695729778566,
+      "std_recovery": 0.0550144510725933,
+      "avg_rank": 4.779835390946502
+    },
+    "L0H15": {
+      "appearances": 265,
+      "appearance_rate": 0.265,
+      "avg_recovery": 0.03430738772423762,
+      "std_recovery": 0.06307002717142274,
+      "avg_rank": 5.788679245283019
+    },
+    "L0H10": {
+      "appearances": 264,
+      "appearance_rate": 0.264,
+      "avg_recovery": 0.032816006590358236,
+      "std_recovery": 0.02769600379121119,
+      "avg_rank": 5.390151515151516
+    },
+    "L1H1": {
+      "appearances": 253,
+      "appearance_rate": 0.253,
+      "avg_recovery": 0.04764176608825272,
+      "std_recovery": 0.05241580361074824,
+      "avg_rank": 5.296442687747035
+    },
+    "L4H9": {
+      "appearances": 243,
+      "appearance_rate": 0.243,
+      "avg_recovery": 0.03107896284296066,
+      "std_recovery": 0.04710306914527174,
+      "avg_rank": 5.8559670781893
+    },
+    "L0H14": {
+      "appearances": 234,
+      "appearance_rate": 0.234,
+      "avg_recovery": 0.033486450823326394,
+      "std_recovery": 0.025990173185616652,
+      "avg_rank": 6.5085470085470085
+    },
+    "L4H16": {
+      "appearances": 232,
+      "appearance_rate": 0.232,
+      "avg_recovery": 0.041519664838139354,
+      "std_recovery": 0.09551791215496497,
+      "avg_rank": 6.038793103448276
+    }
+  },
+  "layer_statistics": {
+    "L0": {
+      "num_observations": 1000,
+      "mean_recovery": 0.23964829453727832,
+      "std_recovery": 0.3120723717944999,
+      "min_recovery": -2.8849590304225745,
+      "max_recovery": 3.3075168079994075
+    },
+    "L1": {
+      "num_observations": 1000,
+      "mean_recovery": 0.13609516089575244,
+      "std_recovery": 0.13800568344683037,
+      "min_recovery": -1.1058139757559509,
+      "max_recovery": 0.9656734228333532
+    },
+    "L2": {
+      "num_observations": 1000,
+      "mean_recovery": 0.1333675969217994,
+      "std_recovery": 0.40436759915031556,
+      "min_recovery": -4.235083148014717,
+      "max_recovery": 1.731597667439178
+    },
+    "L3": {
+      "num_observations": 1000,
+      "mean_recovery": 0.09673012635865347,
+      "std_recovery": 0.2911716670649744,
+      "min_recovery": -2.3486161364434204,
+      "max_recovery": 3.046382332939253
+    },
+    "L4": {
+      "num_observations": 1000,
+      "mean_recovery": 0.3709709352541492,
+      "std_recovery": 0.23328541827243102,
+      "min_recovery": 0.04252531578781471,
+      "max_recovery": 2.475749792339419
+    },
+    "L5": {
+      "num_observations": 1000,
+      "mean_recovery": 0.0,
+      "std_recovery": 0.0,
+      "min_recovery": 0.0,
+      "max_recovery": 0.0
+    }
+  }
+}

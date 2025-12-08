@@ -1,2 +1,4 @@
 __pycache__/
-visualizations/
+visualizations*
+slurm/scripts/
+results/robustness_trials/
