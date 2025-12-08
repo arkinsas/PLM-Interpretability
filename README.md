@@ -35,8 +35,6 @@ python slurm/aggregate_results.py
 - Individual trials: `results/robustness_trials/Ubiquitin_trial_00000.json`
 - Aggregated summaries: `results/robustness_summaries/robustness_500_Ubiquitin.json`
 
-**Performance:** ~2 min/trial, 500 trials complete in ~30-40 min with full parallelization
-
 ## Project Structure
 
 **Core Analysis:**

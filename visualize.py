@@ -43,21 +43,13 @@ def plot_head_attention(
         results = model(batch_tokens, repr_layers=[], need_head_weights=True)
         attn = results["attentions"]  # Raw tensor
 
-        # --- SHAPE FIX LOGIC ---
-        # Different versions of ESM/PyTorch return different shapes.
-        # We need to find which dimension matches the number of layers (6).
-
-        # Expected shapes:
-        # Type A: (Layers, Batch, Heads, Seq, Seq) -> Standard
-        # Type B: (Batch, Layers, Heads, Seq, Seq) -> Common in some setups
-
         num_layers = len(model.layers)
 
         if attn.shape[0] == num_layers:
             # Case A: Layers are dim 0
             attn_matrix = attn[layer, 0, head].cpu().numpy()
         elif attn.shape[1] == num_layers:
-            # Case B: Layers are dim 1 (Your previous error case)
+            # Case B: Layers are dim 1
             attn_matrix = attn[0, layer, head].cpu().numpy()
         else:
             print(
@@ -65,7 +57,7 @@ def plot_head_attention(
             )
             raise ValueError("Could not determine layer dimension in attention tensor.")
 
-    # --- PLOTTING ---
+    # Plotting
     plt.figure(figsize=(10, 8))
 
     ax = sns.heatmap(attn_matrix, cmap="viridis", square=True)
