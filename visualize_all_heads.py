@@ -1,15 +1,3 @@
-"""
-Generate attention visualizations for ALL layers and heads across all proteins
-using the EXACT experimental setup from multi_protein_main.py.
-
-This reads experimental_metadata.json to get:
-- The exact contact pairs used in each experiment
-- The corrupted sequences (matching the causal tracing experiments)
-- Top performing heads for each protein
-
-This ensures visualizations match the experimental conditions where recovery scores were measured.
-"""
-
 import json
 import os
 from pathlib import Path

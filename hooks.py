@@ -1,10 +1,3 @@
-"""Utilities for recording and patching ESM-2 activations.
-
-PatchManager wraps PyTorch forward hooks to cache clean activations and
-optionally swap them into a corrupted run, enabling activation patching
-experiments without modifying the underlying model code.
-"""
-
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Dict, Iterable, List, Optional, Set, Tuple
